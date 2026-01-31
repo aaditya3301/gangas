@@ -16,6 +16,20 @@ PROJECT_ROOT = Path(__file__).parent.parent
 DATA_RAW = PROJECT_ROOT / 'data' / 'raw'
 DATA_PROCESSED = PROJECT_ROOT / 'data' / 'processed'
 
+# Auto-download data if not present
+def ensure_data_available():
+    """Check if data exists, download if needed"""
+    try:
+        from data_downloader import download_lidar_data
+        zone_dirs = [DATA_RAW / 'zone_53H13SE', DATA_RAW / 'zone_53L1NW']
+        if not all(d.exists() for d in zone_dirs):
+            print("📥 Data not found locally, downloading from cloud storage...")
+            download_lidar_data()
+    except ImportError:
+        pass  # data_downloader not available
+    except Exception as e:
+        print(f"⚠️ Could not auto-download data: {e}")
+
 
 class LiDARDataset:
     """Manages LiDAR DEM and ORTHO image pairs"""
@@ -28,6 +42,8 @@ class LiDARDataset:
             zone_name: Name of geographic zone (e.g., 'zone_53H13SE')
             load_ortho: If False, skip ORTHO scanning (DEM-only mode for large datasets)
         """
+        # Ensure data is downloaded
+        ensure_data_available()
         self.zone_name = zone_name
         self.enable_ortho = load_ortho  # Renamed to avoid conflict with method name
         self.dem_dir = DATA_RAW / zone_name / 'DEM'
