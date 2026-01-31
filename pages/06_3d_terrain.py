@@ -14,16 +14,19 @@ from datetime import datetime, timedelta
 sys.path.append(str(Path(__file__).parent.parent))
 
 from src.lidar_loader import load_combined_tiles
+from src.ui_components import get_common_css, page_header, section_header
 
 st.set_page_config(
     page_title="3D Terrain Viewer - Aqua Guardians",
-    page_icon="🎮",
+    page_icon="🗺️",
     layout="wide"
 )
 
+# Apply common CSS
+st.markdown(get_common_css(), unsafe_allow_html=True)
+
 # Header
-st.title("🎮 3D Interactive Terrain Viewer")
-st.markdown("### Real-Time Flood Simulation on Actual LiDAR Terrain")
+page_header("🗺️", "3D Interactive Terrain Viewer", "Real-Time Flood Simulation on Actual LiDAR Terrain")
 st.markdown("---")
 
 # Zone selector

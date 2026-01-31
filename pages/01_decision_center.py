@@ -16,15 +16,19 @@ from datetime import datetime
 sys.path.append(str(Path(__file__).parent.parent / 'src'))
 
 from decision_engine import DecisionEngine
+from ui_components import get_common_css, page_header, section_header
 
 # Page config
 st.set_page_config(
     page_title="Decision Center - Ganga Guardian AI",
-    page_icon="🚨",
+    page_icon="⚠️",
     layout="wide"
 )
 
-# Custom CSS
+# Apply common CSS
+st.markdown(get_common_css(), unsafe_allow_html=True)
+
+# Additional page-specific CSS
 st.markdown("""
 <style>
     .alert-critical {
@@ -87,8 +91,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.title("🚨 Decision Support Center")
-st.markdown("**Real-time Alerts & Action Recommendations**")
+page_header("⚠️", "Decision Support Center", "Real-time Alerts & Emergency Response")
 st.divider()
 
 # Initialize decision engine

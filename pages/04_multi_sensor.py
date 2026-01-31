@@ -16,16 +16,19 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from src.lidar_loader import load_combined_tiles
+from src.ui_components import get_common_css, page_header, section_header
 
 st.set_page_config(
     page_title="Multi-Sensor Fusion - Aqua Guardians",
-    page_icon="🛰️",
+    page_icon="📡",
     layout="wide"
 )
 
+# Apply common CSS
+st.markdown(get_common_css(), unsafe_allow_html=True)
+
 # Header
-st.title("🛰️ Multi-Sensor Data Fusion")
-st.markdown("### Cross-Validation: LiDAR + Satellite + IoT")
+page_header("📡", "Multi-Sensor Data Fusion", "Cross-Validation: LiDAR + Satellite + IoT")
 st.markdown("---")
 
 # Zone selector

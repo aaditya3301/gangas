@@ -17,15 +17,19 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
 
+from src.ui_components import get_common_css, page_header, section_header
+
 st.set_page_config(
     page_title="Evacuation Optimizer - Aqua Guardians",
-    page_icon="🎯",
+    page_icon="🚨",
     layout="wide"
 )
 
+# Apply common CSS
+st.markdown(get_common_css(), unsafe_allow_html=True)
+
 # Header
-st.title("🎯 AI Evacuation Route Optimizer")
-st.markdown("### Machine Learning-Powered Emergency Route Planning")
+page_header("🚨", "AI Evacuation Route Optimizer", "Machine Learning-Powered Emergency Route Planning")
 st.markdown("---")
 
 # Emergency banner

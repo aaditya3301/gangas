@@ -17,15 +17,18 @@ sys.path.append(str(Path(__file__).parent.parent / 'src'))
 
 from ai_predictor import FloodPredictor, generate_rainfall_forecast
 from data_loader import LiDARDataset
+from ui_components import get_common_css, page_header, section_header
 
 # Page config
 st.set_page_config(
     page_title="AI Predictions - Ganga Guardian AI",
-    page_icon="🤖",
+    page_icon="🔮",
     layout="wide"
 )
 
 # Custom CSS
+st.markdown(get_common_css(), unsafe_allow_html=True)
+
 st.markdown("""
 <style>
     .prediction-card {
@@ -58,13 +61,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.title("🤖 AI-Powered Flood Predictions")
-st.markdown("**Machine Learning Climate Impact Forecasting**")
+page_header("🔮", "AI-Powered Flood Predictions", "Machine Learning Climate Impact Forecasting")
 st.divider()
 
 # Sidebar controls
 with st.sidebar:
-    st.header("⚙️ Prediction Settings")
+    st.header("Prediction Settings")
     
     zone = st.selectbox(
         "Select Zone",
@@ -73,14 +75,14 @@ with st.sidebar:
     )
     
     forecast_hours = st.slider(
-        "Forecast Horizon (hours)",
+        "Forecast Horizon (Hours)",
         24, 120, 72, 6
     )
     
     st.divider()
     
     st.markdown("### 🌧️ Rainfall Forecast")
-    st.caption("Simulated rainfall prediction")
+    st.caption("Simulated Rainfall Prediction")
     
     # Generate rainfall forecast
     rainfall_forecast = generate_rainfall_forecast(forecast_hours)

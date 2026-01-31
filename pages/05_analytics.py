@@ -16,6 +16,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from src.lidar_loader import load_combined_tiles
+from src.ui_components import get_common_css, page_header, section_header
 
 st.set_page_config(
     page_title="Analytics - Aqua Guardians",
@@ -23,9 +24,11 @@ st.set_page_config(
     layout="wide"
 )
 
+# Apply common CSS
+st.markdown(get_common_css(), unsafe_allow_html=True)
+
 # Header
-st.title("📊 Analytics Dashboard")
-st.markdown("### Data-Driven Insights for Flood Management")
+page_header("📊", "Analytics Dashboard", "Data-Driven Insights for Flood Management")
 st.markdown("---")
 
 # Zone selector

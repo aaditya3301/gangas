@@ -15,12 +15,16 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from src.community_db import CommunityDatabase
+from src.ui_components import get_common_css, page_header, section_header
 
 st.set_page_config(
     page_title="Community Portal - Aqua Guardians",
-    page_icon="👥",
+    page_icon="👤",
     layout="wide"
 )
+
+# Apply common CSS
+st.markdown(get_common_css(), unsafe_allow_html=True)
 
 # Initialize database
 @st.cache_resource
@@ -33,8 +37,7 @@ def init_database():
 db = init_database()
 
 # Header
-st.title("👥 Community Portal")
-st.markdown("### Citizen Science: Your Eyes on the River")
+page_header("👤", "Community Portal", "Citizen Science: Your Eyes on the River")
 st.markdown("---")
 
 # Top Stats Row
