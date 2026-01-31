@@ -18,7 +18,6 @@ sys.path.append(str(Path(__file__).parent.parent / 'src'))
 from ai_predictor import FloodPredictor, generate_rainfall_forecast
 from data_loader import LiDARDataset
 from ui_components import get_common_css, page_header, section_header
-from synthetic_data import generate_synthetic_dem as create_synthetic_dem
 
 # Page config
 st.set_page_config(
@@ -115,25 +114,13 @@ predictor = get_predictor()
 # Load zone data
 @st.cache_data
 def load_zone_data(zone_name):
-    """Load DEM data for the selected zone - uses synthetic data if files not found"""
-    try:
-        dataset = LiDARDataset(zone_name)
-        
-        # Check if any data files exist
-        if len(dataset.matched_pairs) == 0:
-            st.warning(f"⚠️ No LiDAR data files found for {zone_name}. Using synthetic terrain data for demo.")
-            dem = create_synthetic_dem(zone_name)
-            st.info(f"ℹ️ Using synthetic {dem.shape[0]}x{dem.shape[1]} terrain model")
-            return dem
-        
-        # Load combined DEM (returns dem, rgb, metadata tuple)
-        dem_data, _, _ = dataset.load_combined_tiles()
-        return dem_data
-    except Exception as e:
-        st.warning(f"⚠️ Could not load real data: {e}. Using synthetic terrain for demo.")
-        dem = create_synthetic_dem(zone_name)
-        st.info(f"ℹ️ Using synthetic {dem.shape[0]}x{dem.shape[1]} terrain model")
-        return dem
+    """Load DEM data for the selected zone"""
+    dataset = LiDARDataset(zone_name)
+    
+    # Load combined DEM (returns dem, rgb, metadata tuple)
+    dem_data, _, _ = dataset.load_combined_tiles()
+    
+    return dem_data
 
 with st.spinner(f"🔄 Loading {zone} data..."):
     dem_data = load_zone_data(zone)

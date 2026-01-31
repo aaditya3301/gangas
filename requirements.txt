@@ -33,5 +33,3 @@ whitebox>=2.3.0
 
 # Utilities
 tqdm>=4.66.0  # Progress bars
-requests>=2.31.0  # HTTP requests for data download
-gdown>=4.7.1  # Google Drive downloader
