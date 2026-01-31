@@ -16,6 +16,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from src.lidar_loader import load_combined_tiles
+from src.synthetic_data import load_data_with_fallback
 from src.ui_components import get_common_css, page_header, section_header
 
 st.set_page_config(
@@ -67,11 +68,7 @@ st.markdown("---")
 @st.cache_data(show_spinner=True)
 def load_zone_data(zone_name):
     """Load and process zone data"""
-    try:
-        dem, rgb, metadata = load_combined_tiles(zone_name)
-        return dem, rgb, metadata, None
-    except Exception as e:
-        return None, None, None, str(e)
+    return load_data_with_fallback(zone_name, load_combined_tiles)
 
 with st.spinner(f"Loading {selected_zone} data..."):
     dem_data, rgb_data, metadata, error = load_zone_data(selected_zone)

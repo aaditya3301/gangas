@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 sys.path.append(str(Path(__file__).parent.parent))
 
 from src.lidar_loader import load_combined_tiles
+from src.synthetic_data import load_data_with_fallback
 from src.ui_components import get_common_css, page_header, section_header
 
 st.set_page_config(
@@ -55,20 +56,20 @@ with col2:
 @st.cache_data(show_spinner=True)
 def load_zone_data(zone_name):
     """Load and process zone data"""
-    try:
-        dem, rgb, metadata = load_combined_tiles(zone_name)
-        
-        # Downsample for 3D performance (max 200x200 for smooth rendering)
-        if dem.shape[0] > 200 or dem.shape[1] > 200:
-            downsample_y = max(1, dem.shape[0] // 200)
-            downsample_x = max(1, dem.shape[1] // 200)
-            dem_downsampled = dem[::downsample_y, ::downsample_x]
-        else:
-            dem_downsampled = dem
-        
-        return dem_downsampled, None
-    except Exception as e:
-        return None, str(e)
+    dem, rgb, metadata, error = load_data_with_fallback(zone_name, load_combined_tiles)
+    
+    if error:
+        return None, error
+    
+    # Downsample for 3D performance (max 200x200 for smooth rendering)
+    if dem.shape[0] > 200 or dem.shape[1] > 200:
+        downsample_y = max(1, dem.shape[0] // 200)
+        downsample_x = max(1, dem.shape[1] // 200)
+        dem_downsampled = dem[::downsample_y, ::downsample_x]
+    else:
+        dem_downsampled = dem
+    
+    return dem_downsampled, None
 
 with st.spinner(f"🔄 Loading {selected_zone} terrain data..."):
     dem_data, error = load_zone_data(selected_zone)

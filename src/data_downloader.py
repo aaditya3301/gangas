@@ -13,22 +13,32 @@ PROJECT_ROOT = Path(__file__).parent.parent
 DATA_DIR = PROJECT_ROOT / 'data'
 
 def download_file(url: str, destination: Path):
-    """Download file with progress bar"""
-    response = requests.get(url, stream=True)
-    total_size = int(response.headers.get('content-length', 0))
-    
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    
-    with open(destination, 'wb') as file, tqdm(
-        desc=destination.name,
-        total=total_size,
-        unit='B',
-        unit_scale=True,
-        unit_divisor=1024,
-    ) as bar:
-        for chunk in response.iter_content(chunk_size=8192):
-            file.write(chunk)
-            bar.update(len(chunk))
+    """Download file with progress bar - handles Google Drive"""
+    try:
+        # Use gdown for Google Drive links
+        if 'drive.google.com' in url:
+            import gdown
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            gdown.download(url, str(destination), quiet=False, fuzzy=True)
+        else:
+            response = requests.get(url, stream=True)
+            total_size = int(response.headers.get('content-length', 0))
+            
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(destination, 'wb') as file, tqdm(
+                desc=destination.name,
+                total=total_size,
+                unit='B',
+                unit_scale=True,
+                unit_divisor=1024,
+            ) as bar:
+                for chunk in response.iter_content(chunk_size=8192):
+                    file.write(chunk)
+                    bar.update(len(chunk))
+    except Exception as e:
+        print(f"❌ Download failed: {e}")
+        raise
 
 def extract_zip(zip_path: Path, extract_to: Path):
     """Extract zip file"""
